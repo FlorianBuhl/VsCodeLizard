@@ -38,7 +38,7 @@
 			  "owner": "lizard",
 			  "fileLocation": ["relative", "${workspaceFolder}"],
 			  "pattern": {
-				"regexp": "(.+):(\\d+): (.+): (.+)",
+				"regexp": "^(.+):(\\d+): (.+): (.+)$",
 				"file": 1,
 				"line": 2,
 				"severity": 3,
