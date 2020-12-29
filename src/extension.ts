@@ -40,6 +40,12 @@ const taskProvider = vscode.tasks.registerTaskProvider('lizard', {
 			if (lizardConfiguration.get('modifiedCyclomaticComplexityCalculation')===true) {
 				args.push('--modified');
 			}
+
+			args.push('--CCN="' + lizardConfiguration.get('thresholdCyclomaticComplexity') + '"');
+			args.push('--arguments="' + lizardConfiguration.get('thresholdNumberOfParameters') + '"')
+			args.push('--length="' + lizardConfiguration.get('thresholdLinesOfCodeWithoutComments') + '"')
+			args.push('-Tnloc="' + lizardConfiguration.get('thresholdNumberOfTokens') + '"')
+			args.push('--working_threads="' + lizardConfiguration.get('numberOfWorkingThreads') + '"')
 			
 			const argString = args.join(' ');
 			const lizardShellEcecution = new vscode.ShellExecution("lizard ${relativeFile} " + argString)
