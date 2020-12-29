@@ -2,6 +2,14 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
+const reportOnOpenedFile = "lizardReportOnOpenedFile";
+const lintOnOpenedFile = "lizardLintOnOpenedFile";
+
+const taskArray = [
+	reportOnOpenedFile,
+	lintOnOpenedFile
+];
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -26,36 +34,36 @@ export function activate(context: vscode.ExtensionContext) {
 // this method is called when your extension is deactivated
 export function deactivate() {}
 
-
 const taskProvider = vscode.tasks.registerTaskProvider('lizard', {
 	provideTasks: () => {
 		const tasks = [];
 
 		if(vscode.workspace.workspaceFolders)
 		{
-			
-			const args = [];
-			const lizardConfiguration = vscode.workspace.getConfiguration('lizard');
+			for(let i=0; i<taskArray.length; i++)
+			{			
+				let task;
+				const lizardShellEcecution = calcShellcmd(taskArray[i])
 
-			if (lizardConfiguration.get('modifiedCyclomaticComplexityCalculation')===true) {
-				args.push('--modified');
-			}
-
-			args.push('--CCN="' + lizardConfiguration.get('thresholdCyclomaticComplexity') + '"');
-			args.push('--arguments="' + lizardConfiguration.get('thresholdNumberOfParameters') + '"')
-			args.push('--length="' + lizardConfiguration.get('thresholdLinesOfCodeWithoutComments') + '"')
-			args.push('-Tnloc="' + lizardConfiguration.get('thresholdNumberOfTokens') + '"')
-			args.push('--working_threads="' + lizardConfiguration.get('numberOfWorkingThreads') + '"')
-			
-			const argString = args.join(' ');
-			const lizardShellEcecution = new vscode.ShellExecution("lizard ${relativeFile} " + argString)
-
-			const task = new vscode.Task({ type: 'lizard' }, 
-				vscode.workspace.workspaceFolders[0],
-				"lizardOnOpenedFile", 
-				"lizard",
-				lizardShellEcecution);
+				if(taskArray[i].toLowerCase().includes("lint"))
+				{
+					task = new vscode.Task({ type: 'lizard', taskCmd: taskArray[i] }, 
+					vscode.workspace.workspaceFolders[0],
+					taskArray[i], 
+					"lizard",
+					lizardShellEcecution,
+					'$lizardProblemMatcher);');
+				}
+				else
+				{
+					task = new vscode.Task({ type: 'lizard', taskCmd: taskArray[i] }, 
+					vscode.workspace.workspaceFolders[0],
+					taskArray[i], 
+					"lizard",
+					lizardShellEcecution);
+				}
 				tasks.push(task);
+			}
 		}
 		return tasks;
 	},
@@ -63,15 +71,52 @@ const taskProvider = vscode.tasks.registerTaskProvider('lizard', {
 
 		if(vscode.workspace.workspaceFolders)
 		{
-			const lizardShellEcecution = new vscode.ShellExecution("lizard ${relativeFile}")
-			const task = new vscode.Task({ type: 'lizard' }, 
+			let vsTask;
+			const lizardShellEcecution = calcShellcmd(_task.name)
+
+			if(_task.name.toLowerCase().includes("lint"))
+			{
+				vsTask = new vscode.Task(_task.definition, 
 				vscode.workspace.workspaceFolders[0],
-				"lizardOnOpenedFile", 
+				_task.definition.taskCmd, 
+				"lizard",
+				lizardShellEcecution,
+				'$lizardProblemMatcher);');
+			}
+			else
+			{
+				vsTask = new vscode.Task(_task.definition, 
+				vscode.workspace.workspaceFolders[0],
+				_task.definition.taskCmd, 
 				"lizard",
 				lizardShellEcecution);
+			}
 
-				return task;
+			return vsTask;
 		}
 		return undefined;
 	}
   });
+
+  function calcShellcmd(typeOfTask : string){
+	const args = [];
+	const lizardConfiguration = vscode.workspace.getConfiguration('lizard');
+
+	if (lizardConfiguration.get('modifiedCyclomaticComplexityCalculation')===true) {
+		args.push('--modified');
+	}
+
+	args.push('--CCN="' + lizardConfiguration.get('thresholdCyclomaticComplexity') + '"');
+	args.push('--arguments="' + lizardConfiguration.get('thresholdNumberOfParameters') + '"');
+	args.push('--length="' + lizardConfiguration.get('thresholdLinesOfCodeWithoutComments') + '"');
+	args.push('-Tnloc="' + lizardConfiguration.get('thresholdNumberOfTokens') + '"');
+	args.push('--working_threads="' + lizardConfiguration.get('numberOfWorkingThreads') + '"');
+
+	if(typeOfTask.toLowerCase().includes("lint")) {
+		args.push('--warnings_only');
+	}
+	
+	const argString = args.join(' ');
+	const lizardShellEcecution = new vscode.ShellExecution("lizard ${relativeFile} " + argString)
+	return lizardShellEcecution;
+  }

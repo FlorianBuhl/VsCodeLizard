@@ -22,9 +22,30 @@
 		],
 		"taskDefinitions": [
 			{
-				"type": "lizard"
+				"type": "lizard",
+				"required" : ["taskCmd"],
+				"properties": {
+					"taskCmd": {
+					  "type": "string",
+					  "description": "The type of command which shall be exeuted"
+					}
+				}
 			}
 		],
+		"problemMatchers": [
+			{
+			  "name": "lizardProblemMatcher",
+			  "owner": "lizard",
+			  "fileLocation": ["relative", "${workspaceFolder}"],
+			  "pattern": {
+				"regexp": "(.+):(\\d+): (.+): (.+)",
+				"file": 1,
+				"line": 2,
+				"severity": 3,
+				"message": 4
+			  }
+			}
+		  ],
 		"configuration": {
 			"title": "Lizard",
 			"properties": {
