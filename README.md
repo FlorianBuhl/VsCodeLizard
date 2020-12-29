@@ -1,65 +1,36 @@
-# lizard README
+# lizard-linter
 
-This is the README for your extension "lizard". After writing up a brief description, we recommend including the following sections.
+<!-- [![Build Status Circle Ci Linux](https://img.shields.io/circleci/build/gh/FlorianBuhl/lizard-linter.svg?style=plastic)](https://app.circleci.com/pipelines/github/FlorianBuhl/lizard-linter)
+[![Build Status Travis Ci OSX](https://img.shields.io/travis/com/FlorianBuhl/lizard-linter?style=plastic)](https://travis-ci.com/FlorianBuhl/lizard-linter)
+[![Dependencies](https://img.shields.io/david/FlorianBuhl/lizard-linter?style=plastic)](https://david-dm.org/FlorianBuhl/lizard-linter) -->
 
-## Features
+This extension executes lizard cyclomatic complexity tooling in [Visual Studio Code (VSC)](https://code.visualstudio.com/) editor
+It uses [lizard](https://github.com/terryyin/lizard) tool to show the cyclomatic complexity in VSC.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+The lizard linter analyzes functions for
+- cyclomatic complexity.
+- the number of number of parameters
+- the line number of  function without comments
+- the token number
 
-For example if there is an image subfolder under your extension project workspace:
+The following languages are supported:
+c, cpp, c#, GDScript, GoLang, Java, JavaScript, Lua, ObjectiveC, PHP, Python, Ruby, Rust, Scala, SWIFT.
 
-\!\[feature X\]\(images/feature-x.png\)
+The extension provides tasks to execute the lizard command line tool.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+ - lizardReportOnOpenedFile: Executes the lizard tool on the current opened file
+ - lizardLintOnOpenedFile: Executes lizard tool on the current opened file and shows only in case there are warnings (Value is above configured threshold).
 
-## Requirements
+ The extension provides thresholds in case a treshold is exceeded then the "lint" tasks will report the warnings and also mark them in the "Problem" console.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## Cyclomatic Complexity
 
-## Extension Settings
+The cyclomatic complexity number is basically the number of decisions in the source code.
+The higher the number the more complex and the more tests you need to verify the function.
+E.g. a cyclomatic complexity of 3 would require at least 3 tests to verify the function.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+The linter shall help you to keep your functions slim and less complex and easy to test.
 
-For example:
+## Licence
 
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+lizard-linter is released under the MIT license. For details please check the [LICENSE.md](LICENSE.md) file.
