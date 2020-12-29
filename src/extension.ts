@@ -33,7 +33,17 @@ const taskProvider = vscode.tasks.registerTaskProvider('lizard', {
 
 		if(vscode.workspace.workspaceFolders)
 		{
-			const lizardShellEcecution = new vscode.ShellExecution("lizard ${relativeFile}")
+			
+			const args = [];
+			const lizardConfiguration = vscode.workspace.getConfiguration('lizard');
+
+			if (lizardConfiguration.get('modifiedCyclomaticComplexityCalculation')===true) {
+				args.push('--modified');
+			}
+			
+			const argString = args.join(' ');
+			const lizardShellEcecution = new vscode.ShellExecution("lizard ${relativeFile} " + argString)
+
 			const task = new vscode.Task({ type: 'lizard' }, 
 				vscode.workspace.workspaceFolders[0],
 				"lizardOnOpenedFile", 
