@@ -43,7 +43,7 @@ const taskProvider = vscode.tasks.registerTaskProvider('lizard', {
 			for(let i=0; i<taskArray.length; i++)
 			{			
 				let task;
-				const lizardShellEcecution = calcShellcmd(taskArray[i])
+				const lizardShellEcecution = calcShellcmd(taskArray[i]);
 
 				if(taskArray[i].toLowerCase().includes("lint"))
 				{
@@ -72,7 +72,7 @@ const taskProvider = vscode.tasks.registerTaskProvider('lizard', {
 		if(vscode.workspace.workspaceFolders)
 		{
 			let vsTask;
-			const lizardShellEcecution = calcShellcmd(_task.name)
+			const lizardShellEcecution = calcShellcmd(_task.name);
 
 			if(_task.name.toLowerCase().includes("lint"))
 			{
@@ -117,6 +117,6 @@ const taskProvider = vscode.tasks.registerTaskProvider('lizard', {
 	}
 	
 	const argString = args.join(' ');
-	const lizardShellEcecution = new vscode.ShellExecution("lizard ${relativeFile} " + argString)
+	const lizardShellEcecution = new vscode.ShellExecution("lizard ${relativeFile} " + argString);
 	return lizardShellEcecution;
   }
